@@ -3,10 +3,7 @@ package com.projeto.coinmestre.controller;
 import com.projeto.coinmestre.model.Expense;
 import com.projeto.coinmestre.service.ExpenseService;
 import lombok.AllArgsConstructor;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -25,7 +22,12 @@ public class ExpenseController {
 
     @GetMapping("{id}")
     public Expense findById(@PathVariable("id") Long id){
-
         return this.service.findById(id);
     }
+
+    @PostMapping
+    public Expense insert(@RequestBody Expense expense){
+        return this.service.insert(expense);
+    }
+
 }

@@ -28,6 +28,9 @@ public class ExpenseService {
         } else {
             throw new RuntimeException("Despesa não encontrada na base de dados");
         }
+    }
 
+    public Expense insert(Expense expense) {
+        return this.repository.save(expense);
     }
 }
