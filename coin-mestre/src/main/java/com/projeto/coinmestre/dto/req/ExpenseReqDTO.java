@@ -17,21 +17,21 @@ import java.time.LocalDate;
 @Setter
 public class ExpenseReqDTO {
 
-    @NotNull
+    @NotNull(message = "Descrição não deve ser nulo")
     private String description;
 
     @DecimalMin(message = "Minímo R$1,00", value = "1")
     @NotNull
     private Double value;
 
-    @NotNull
+    @NotNull(message ="Categoria não pode ser nula")
     private String category;
 
-    @NotNull
+    @NotNull(message ="Data de lançamento não pode ser nula")
     @PastOrPresent
     private LocalDate purchaseDate;
 
-    @NotNull
+    @NotNull(message ="Data de vencimento não pode ser nula")
     @FutureOrPresent
     private LocalDate dueDate;
 
