@@ -2,7 +2,6 @@ package com.projeto.coinmestre.controller;
 
 import com.projeto.coinmestre.dto.req.ExpenseReqDTO;
 import com.projeto.coinmestre.dto.res.ExpenseResDTO;
-import com.projeto.coinmestre.model.Expense;
 import com.projeto.coinmestre.service.ExpenseService;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
@@ -31,5 +30,10 @@ public class ExpenseController {
     @PostMapping
     public ExpenseResDTO insert(@Valid @RequestBody ExpenseReqDTO dto){
         return this.service.insert(dto);
+    }
+
+    @DeleteMapping("{id}")
+    public void deleteById(@PathVariable("id")Long id){
+         this.service.deleteById(id);
     }
 }

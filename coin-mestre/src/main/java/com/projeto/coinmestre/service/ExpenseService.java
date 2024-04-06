@@ -25,7 +25,6 @@ public class ExpenseService {
             ExpenseResDTO expenseResDTO = new ExpenseResDTO(expense);
             resDTOList.add(expenseResDTO);
         }
-
         return resDTOList;
     }
 
@@ -42,5 +41,13 @@ public class ExpenseService {
         Expense expense = ExpenseReqDTO.dtoToModel(dto);
         return new ExpenseResDTO(this.repository.save(expense));
     }
+
+    public void deleteById(Long id){
+        this.repository.deleteById(id);
+
+    }
 }
+
+
+
 
