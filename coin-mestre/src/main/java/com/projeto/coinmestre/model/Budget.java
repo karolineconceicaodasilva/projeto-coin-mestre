@@ -1,5 +1,6 @@
 package com.projeto.coinmestre.model;
 
+import com.projeto.coinmestre.base.BaseEntity;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -12,7 +13,7 @@ import java.time.LocalDate;
 @Getter
 @Setter
 @Builder
-public class Budget {
+public class Budget extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

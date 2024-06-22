@@ -1,6 +1,6 @@
 package com.projeto.coinmestre.model;
 
-import com.projeto.coinmestre.domain.ExpenseStatus;
+import com.projeto.coinmestre.base.BaseEntity;
 import com.projeto.coinmestre.domain.RevenueStatus;
 import jakarta.persistence.*;
 import lombok.*;
@@ -14,7 +14,7 @@ import java.time.LocalDate;
 @Getter
 @Setter
 @Builder
-public class Revenue {
+public class Revenue extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
