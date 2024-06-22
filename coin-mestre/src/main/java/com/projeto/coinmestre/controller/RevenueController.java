@@ -1,6 +1,9 @@
 package com.projeto.coinmestre.controller;
 
+import com.projeto.coinmestre.base.PageReq;
+import com.projeto.coinmestre.base.PageRes;
 import com.projeto.coinmestre.dto.req.RevenueReqDTO;
+import com.projeto.coinmestre.dto.res.ExpenseValueResDTO;
 import com.projeto.coinmestre.dto.res.RevenueResDTO;
 import com.projeto.coinmestre.dto.res.RevenueValueResDTO;
 import com.projeto.coinmestre.service.RevenueService;
@@ -15,8 +18,9 @@ import java.net.URI;
 import java.time.LocalDate;
 import java.util.List;
 
+@CrossOrigin(origins = "http://localhost:3000")
 @RestController
-@RequestMapping("/revenues")
+@RequestMapping("/api/revenues")
 @AllArgsConstructor
 public class RevenueController {
 
@@ -24,12 +28,12 @@ public class RevenueController {
 
     // Retorna status code 200ok (por padrão) boa pratica do API REST para todas as chamadas do metodo get retorna status 200
     @GetMapping
-    public List<RevenueResDTO> findAll() {
-        return this.service.findAllRevenues();
+    public PageRes<RevenueResDTO> index(PageReq query) {
+        return this.service.findAllRevenues(query);
     }
 
     @GetMapping("{id}")
-    public RevenueResDTO findById(@PathVariable("id") Long id) {
+    public RevenueResDTO show(@PathVariable("id") Long id) {
         return this.service.findById(id);
     }
 
@@ -45,9 +49,14 @@ public class RevenueController {
 
     //  Quando não se tem um retorno se usa o 204 no content (boas pratica API REST) PARA QUALQUER COISA QUE NÃO ESPERA RETORNO(VOID)
     @DeleteMapping("{id}")
-    public ResponseEntity<?> deleteById(@PathVariable("id") Long id) {
-        this.service.deleteById(id);
+    public ResponseEntity<?> logicalExclusion(@PathVariable("id")Long id){
+        this.service.logicalExclusion(id);
         return ResponseEntity.noContent().build();
+    }
+
+    @PutMapping("/restore/{id}")
+    public void restoreDeleted(@PathVariable("id") Long id) {
+        this.service.restoreDeleted(id);
     }
 
     @PutMapping("{id}")
@@ -68,6 +77,11 @@ public class RevenueController {
     @GetMapping("revenues-close")
     public RevenueValueResDTO revenuesClosed() {
         return this.service.revenuesClose();
+    }
+
+    @GetMapping("/revenues-overdue")
+    public RevenueValueResDTO revenuesOverdue(){
+        return this.service.revenuesOverdue();
     }
 
     @GetMapping("{initPurchaseDate}/{endPurchaseDate}")

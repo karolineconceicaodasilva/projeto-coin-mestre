@@ -33,7 +33,7 @@ public class ExpenseController {
         return this.service.findAllExpenses(query);
     }
 
-    @GetMapping("{id}")
+    @GetMapping("/{id}")
     public ExpenseResDTO show(@PathVariable("id") Long id){
         return this.service.findById(id);
     }
@@ -47,13 +47,13 @@ public class ExpenseController {
         return ResponseEntity.created(uri).body(response);
     }
 //  Quando não se tem um retorno se usa o 204 no content (boas pratica API REST) PARA QUALQUER COISA QUE NÃO ESPERA RETORNO(VOID)
-    @DeleteMapping("{id}")
+    @DeleteMapping("/{id}")
     public ResponseEntity<?> logicalExclusion(@PathVariable("id")Long id){
         this.service.logicalExclusion(id);
         return ResponseEntity.noContent().build();
     }
 
-    @PutMapping("{id}")
+    @PutMapping("/{id}")
     public ExpenseResDTO update(@PathVariable("id")Long id , @Valid @RequestBody ExpenseReqDTO dto){
         return this.service.update(id , dto);
     }
@@ -63,22 +63,27 @@ public class ExpenseController {
         this.service.restoreDeleted(id);
     }
 
-    @GetMapping("value-of-expenses")
+    @GetMapping("/value-of-expenses")
     public ExpenseValueResDTO sumOfExpenses(){
         return this.service.valueOfExpenses();
     }
 
-    @GetMapping("expenses-open")
+    @GetMapping("/expenses-open")
     public ExpenseValueResDTO expensesOpen(){
         return this.service.expensesOpen();
     }
 
-    @GetMapping("expenses-close")
+    @GetMapping("/expenses-close")
     public ExpenseValueResDTO expensesClosed(){
         return this.service.expensesClose();
     }
 
-    @GetMapping("{initPurchaseDate}/{endPurchaseDate}")
+    @GetMapping("/expenses-overdue")
+    public ExpenseValueResDTO expensesOverdue(){
+        return this.service.expensesOverdue();
+    }
+
+    @GetMapping("/{initPurchaseDate}/{endPurchaseDate}")
     public List<ExpenseResDTO> findAllByPurchaseDate(@PathVariable("initPurchaseDate") @DateTimeFormat(pattern = "dd-MM-yyyy") LocalDate initPurchaseDate,
                                                      @PathVariable("endPurchaseDate") @DateTimeFormat(pattern = "dd-MM-yyyy") LocalDate endPurchaseDate){
         return this.service.findAllByPurchaseDate(initPurchaseDate, endPurchaseDate);

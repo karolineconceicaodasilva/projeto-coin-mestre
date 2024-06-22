@@ -27,12 +27,8 @@ public class ExpenseReqDTO {
     @NotNull(message ="Categoria não pode ser nula")
     private String category;
 
-    @NotNull(message ="Data de lançamento não pode ser nula")
-    @PastOrPresent
     private LocalDate purchaseDate;
 
-    @NotNull(message ="Data de vencimento não pode ser nula")
-    @FutureOrPresent
     private LocalDate dueDate;
 
     @NotNull(message = "Status válidos OPEN, CLOSE e OVERDUE")

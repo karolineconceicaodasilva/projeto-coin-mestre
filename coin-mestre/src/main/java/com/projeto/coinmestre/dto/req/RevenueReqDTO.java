@@ -3,12 +3,11 @@ package com.projeto.coinmestre.dto.req;
 import com.projeto.coinmestre.domain.RevenueStatus;
 import com.projeto.coinmestre.model.Revenue;
 import jakarta.validation.constraints.DecimalMin;
-import jakarta.validation.constraints.FutureOrPresent;
 import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.PastOrPresent;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
+
 import java.time.LocalDate;
 
 @AllArgsConstructor
@@ -23,13 +22,8 @@ public class RevenueReqDTO {
     @NotNull
     private Double value;
 
-
-    @NotNull(message ="Data de lançamento não pode ser nula")
-    @PastOrPresent
     private LocalDate purchaseDate;
 
-    @NotNull(message ="Data de vencimento não pode ser nula")
-    @FutureOrPresent
     private LocalDate dueDate;
 
     @NotNull(message = "Status válidos OPEN, CLOSE e OVERDUE")

@@ -130,6 +130,22 @@ public class ExpenseService {
         return new ExpenseValueResDTO(totalValue, closeExpenses.size());
     }
 
+    public ExpenseValueResDTO expensesOverdue() {
+
+        List<Expense> expenses = this.repository.findAll();
+        List<Expense> closeExpenses = new ArrayList<>();
+
+        for (Expense expense : expenses) {
+            if (expense.getStatus().equals(ExpenseStatus.OVERDUE)) {
+                closeExpenses.add(expense);
+
+            }
+        }
+
+        double totalValue = closeExpenses.stream().mapToDouble(Expense::getValue).sum();
+        return new ExpenseValueResDTO(totalValue, closeExpenses.size());
+    }
+
     //metodo para filtrar as datas
     public List<ExpenseResDTO> findAllByPurchaseDate(LocalDate initPurchaseDate,
                                                      LocalDate endPurchaseDate) {
