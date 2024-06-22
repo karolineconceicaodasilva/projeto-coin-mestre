@@ -1,5 +1,7 @@
 package com.projeto.coinmestre.controller;
 
+import com.projeto.coinmestre.base.PageReq;
+import com.projeto.coinmestre.base.PageRes;
 import com.projeto.coinmestre.dto.req.ExpenseReqDTO;
 import com.projeto.coinmestre.dto.res.ExpenseResDTO;
 import com.projeto.coinmestre.dto.res.ExpenseValueResDTO;
@@ -13,10 +15,12 @@ import org.springframework.web.util.UriComponentsBuilder;
 import java.net.URI;
 import java.time.LocalDate;
 import java.util.List;
+
+@CrossOrigin(origins = "http://localhost:3000")
 //para dizer que essa classe é um controller
 @RestController
 //é uma anotação de nível de classe que define o prefixo de URL para todas as rotas de um controller.
-@RequestMapping("/expenses")
+@RequestMapping("/api/expenses")
 //Anotação para usar os contrutores
 @AllArgsConstructor
 public class ExpenseController {
@@ -25,17 +29,17 @@ public class ExpenseController {
 
 // Retorna status code 200ok (por padrão) boa pratica do API REST para todas as chamadas do metodo get retorna status 200
     @GetMapping
-    public List<ExpenseResDTO> findAll(){
-        return this.service.findAllExpenses();
+    public PageRes<ExpenseResDTO> index(PageReq query) {
+        return this.service.findAllExpenses(query);
     }
 
     @GetMapping("{id}")
-    public ExpenseResDTO findById(@PathVariable("id") Long id){
+    public ExpenseResDTO show(@PathVariable("id") Long id){
         return this.service.findById(id);
     }
 //  Para os metodos que cria algo dentro do serviço se usa o 204 created(boas praticas do API REST)
     @PostMapping
-    public ResponseEntity<ExpenseResDTO> insert(@Valid @RequestBody ExpenseReqDTO dto, UriComponentsBuilder uriBuilder){
+    public ResponseEntity<ExpenseResDTO> store(@Valid @RequestBody ExpenseReqDTO dto, UriComponentsBuilder uriBuilder){
 
         ExpenseResDTO response = this.service.insert(dto);
         URI uri = uriBuilder.path("/expenses/{id}").buildAndExpand(response.getId()).toUri();
@@ -44,14 +48,19 @@ public class ExpenseController {
     }
 //  Quando não se tem um retorno se usa o 204 no content (boas pratica API REST) PARA QUALQUER COISA QUE NÃO ESPERA RETORNO(VOID)
     @DeleteMapping("{id}")
-    public ResponseEntity<?> deleteById(@PathVariable("id")Long id){
-        this.service.deleteById(id);
+    public ResponseEntity<?> logicalExclusion(@PathVariable("id")Long id){
+        this.service.logicalExclusion(id);
         return ResponseEntity.noContent().build();
     }
 
     @PutMapping("{id}")
     public ExpenseResDTO update(@PathVariable("id")Long id , @Valid @RequestBody ExpenseReqDTO dto){
         return this.service.update(id , dto);
+    }
+
+    @PutMapping("/restore/{id}")
+    public void restoreDeleted(@PathVariable("id") Long id) {
+        this.service.restoreDeleted(id);
     }
 
     @GetMapping("value-of-expenses")

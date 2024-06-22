@@ -19,11 +19,12 @@ public class UserReqDTO {
 
     private String confirmationPassword;
 
-    public static User dtoToModel(UserReqDTO dto){
+    public static User dtoToModel(UserReqDTO dto) {
         return User
                 .builder()
                 .name(dto.getName())
-                .email(dto.getEmail())
+                .email(dto.getEmail().trim().toLowerCase())
+                .username(dto.getEmail().trim().toLowerCase())
                 .password(dto.getPassword())
                 .build();
     }

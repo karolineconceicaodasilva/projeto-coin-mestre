@@ -1,18 +1,24 @@
 package com.projeto.coinmestre.service;
 
+import com.projeto.coinmestre.base.PageReq;
+import com.projeto.coinmestre.base.PageRes;
 import com.projeto.coinmestre.domain.ExpenseStatus;
 import com.projeto.coinmestre.dto.req.ExpenseReqDTO;
 import com.projeto.coinmestre.dto.res.ExpenseResDTO;
 import com.projeto.coinmestre.dto.res.ExpenseValueResDTO;
 import com.projeto.coinmestre.model.Expense;
 import com.projeto.coinmestre.repository.ExpenseRepository;
+import com.projeto.coinmestre.util.SearchUtils;
 import lombok.AllArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 
 @Service
@@ -23,26 +29,16 @@ public class ExpenseService {
     private ExpenseRepository repository;
 
     //  metodo que busca todas as despesas atravez de uma lista
-    public List<ExpenseResDTO> findAllExpenses() {
+    public PageRes<ExpenseResDTO> findAllExpenses(PageReq query) {
 
-        //  buscou do banco lista de despesa
-        List<Expense> expenseList = this.repository.findAll();
+        Specification<Expense> deleted = SearchUtils.specByDeleted(query.isDeleted());
+        Specification<Expense> filters = SearchUtils.specByFilter(query.getFilter(), "id",
+                "description", "value", "category", "purchaseDate", "dueDate");
 
-        //  criando a lista de retorno(por enquanto só foi criada, se encontra vazia)
-        List<ExpenseResDTO> resDTOList = new ArrayList<>();
+        Page<Expense> page = this.repository.findAll(deleted.and(filters), query.toPageRequest());
 
-        //  ta passando despesa por despesa
-        for (Expense expense : expenseList) {
-
-            //  criando um objeto novo ExpenseResDTO com as informações da despesa da vez
-            ExpenseResDTO expenseResDTO = new ExpenseResDTO(expense);
-
-            //  ta add o Objeto ExpenseResDTO que foi criado na linha de cima
-            resDTOList.add(expenseResDTO);
-        }
-
-        //       Retornou a lista
-        return resDTOList;
+        return new PageRes<>(page.getContent().stream().map(ExpenseResDTO::new).collect(Collectors.toList()),
+                page.getTotalElements(), page.getTotalPages());
     }
 
     //metodo que busca pelo id as despesas
@@ -65,12 +61,6 @@ public class ExpenseService {
         ExpenseResDTO resDTO = new ExpenseResDTO(expense);
 
         return resDTO;
-    }
-
-    // metodo que deleta uma despesa pelo id
-    public void deleteById(Long id) {
-        this.repository.deleteById(id);
-
     }
 
     //metodo que atualiza uma despesa escolhida pelo numero do id
@@ -111,12 +101,12 @@ public class ExpenseService {
 
     //metodo que soma as despesas que estão abertas
 
-    public ExpenseValueResDTO expensesOpen(){
+    public ExpenseValueResDTO expensesOpen() {
         List<Expense> expenses = this.repository.findAll();
         List<Expense> openExpenses = new ArrayList<>();
 
         for (Expense expense : expenses) {
-            if (expense.getStatus().equals(ExpenseStatus.OPEN)){
+            if (expense.getStatus().equals(ExpenseStatus.OPEN)) {
                 openExpenses.add(expense);
 
             }
@@ -126,12 +116,12 @@ public class ExpenseService {
     }
 
     //metodo que soma as despesas que estão pagas
-    public ExpenseValueResDTO expensesClose(){
+    public ExpenseValueResDTO expensesClose() {
         List<Expense> expenses = this.repository.findAll();
         List<Expense> closeExpenses = new ArrayList<>();
 
         for (Expense expense : expenses) {
-            if (expense.getStatus().equals(ExpenseStatus.CLOSE)){
+            if (expense.getStatus().equals(ExpenseStatus.CLOSE)) {
                 closeExpenses.add(expense);
 
             }
@@ -139,7 +129,8 @@ public class ExpenseService {
         double totalValue = closeExpenses.stream().mapToDouble(Expense::getValue).sum();
         return new ExpenseValueResDTO(totalValue, closeExpenses.size());
     }
-//metodo para filtrar as datas
+
+    //metodo para filtrar as datas
     public List<ExpenseResDTO> findAllByPurchaseDate(LocalDate initPurchaseDate,
                                                      LocalDate endPurchaseDate) {
         List<Expense> expenseList = this.repository.findAllByPurchaseDateBetween(initPurchaseDate, endPurchaseDate);
@@ -153,6 +144,22 @@ public class ExpenseService {
             resDTOList.add(expenseResDTO);
         }
         return resDTOList;
+    }
+
+    public void logicalExclusion(Long id) {
+
+        if (this.repository.findByIdAndNotDeleted(id).isEmpty())
+            throw new RuntimeException("Despesa não encontrada na base de dados.");
+
+        this.repository.softDelete(id);
+    }
+
+    public void restoreDeleted(Long id) {
+
+        if (this.repository.findDeletedById(id).isEmpty())
+            throw new RuntimeException("Despesa não encontrada na base de dados.");
+
+        this.repository.restoreDeleted(id);
     }
 }
 

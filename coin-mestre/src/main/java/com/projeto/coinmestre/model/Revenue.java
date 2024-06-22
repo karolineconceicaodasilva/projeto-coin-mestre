@@ -14,6 +14,7 @@ import java.time.LocalDate;
 @Getter
 @Setter
 @Builder
+@EqualsAndHashCode(callSuper = false)
 public class Revenue extends BaseEntity {
 
     @Id

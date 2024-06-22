@@ -1,1 +1,0 @@
-# projeto-coin-mestre

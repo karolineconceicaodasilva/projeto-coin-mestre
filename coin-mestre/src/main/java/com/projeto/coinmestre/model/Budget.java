@@ -13,6 +13,7 @@ import java.time.LocalDate;
 @Getter
 @Setter
 @Builder
+@EqualsAndHashCode(callSuper = false)
 public class Budget extends BaseEntity {
 
     @Id
