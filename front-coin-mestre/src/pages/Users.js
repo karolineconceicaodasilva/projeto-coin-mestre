@@ -22,6 +22,7 @@ import { ListFilterWithDeleteds } from '../components/ListFilter';
 import LocalDateTimeField from '../components/LocalDateTimeField';
 import { TabPanel } from '../components/TabPanels';
 import RestoreButton from '../components/RestoreButton';
+import { EnumCheckboxInput, EnumField } from '../components/Enums';
 
 export const UserList = props => (
   <List
@@ -64,14 +65,13 @@ const UserForm = props => {
               <TextInput resource="users" source="confirmationPassword" type="password" />
             </Grid>
             <Grid item xs={3}>
-              <TextInput
-                resource="users"
-                source="email"
-                validate={required()}
-              />
+              <TextInput resource="users" source="email" validate={required()} />
             </Grid>
             <Grid item xs={3}>
               <TextInput resource="users" source="name" validate={required()} />
+            </Grid>
+            <Grid item xs={5}>
+              <EnumCheckboxInput resource="users" source="roles" />
             </Grid>
           </Grid>
           <Toolbar disableGutters>
@@ -129,6 +129,7 @@ export const UserCreate = props => (
       <TextInput source="name" validate={required()} />
       <PasswordInput source="password" validate={required()} />
       <PasswordInput source="confirmationPassword" validate={required()} />
+      <EnumCheckboxInput source="roles" />
     </SimpleForm>
   </Create>
 );

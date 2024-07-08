@@ -2,8 +2,8 @@ package com.projeto.coinmestre.dto.req;
 
 import com.projeto.coinmestre.domain.RevenueStatus;
 import com.projeto.coinmestre.model.Revenue;
-import jakarta.validation.constraints.DecimalMin;
-import jakarta.validation.constraints.NotNull;
+import javax.validation.constraints.DecimalMin;
+import javax.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;

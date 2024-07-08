@@ -7,6 +7,7 @@ import com.projeto.coinmestre.dto.req.ExpenseReqDTO;
 import com.projeto.coinmestre.dto.res.ExpenseResDTO;
 import com.projeto.coinmestre.dto.res.ExpenseValueResDTO;
 import com.projeto.coinmestre.model.Expense;
+import com.projeto.coinmestre.model.User;
 import com.projeto.coinmestre.repository.ExpenseRepository;
 import com.projeto.coinmestre.util.SearchUtils;
 import lombok.AllArgsConstructor;
@@ -14,7 +15,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -27,6 +27,7 @@ public class ExpenseService {
 
     // dizendo que estou injetando a classe ExpenseRopository
     private ExpenseRepository repository;
+    private UserService userService;
 
     //  metodo que busca todas as despesas atravez de uma lista
     public PageRes<ExpenseResDTO> findAllExpenses(PageReq query) {
@@ -34,8 +35,9 @@ public class ExpenseService {
         Specification<Expense> deleted = SearchUtils.specByDeleted(query.isDeleted());
         Specification<Expense> filters = SearchUtils.specByFilter(query.getFilter(), "id",
                 "description", "value", "category", "purchaseDate", "dueDate");
+        Specification<Expense> userSpecification = SearchUtils.specByUser(this.userService.findByLoggedUserEntity());
 
-        Page<Expense> page = this.repository.findAll(deleted.and(filters), query.toPageRequest());
+        Page<Expense> page = this.repository.findAll(deleted.and(filters).and(userSpecification), query.toPageRequest());
 
         return new PageRes<>(page.getContent().stream().map(ExpenseResDTO::new).collect(Collectors.toList()),
                 page.getTotalElements(), page.getTotalPages());
@@ -55,7 +57,8 @@ public class ExpenseService {
     public ExpenseResDTO insert(ExpenseReqDTO dto) {
 
         Expense expense = ExpenseReqDTO.dtoToModel(dto);
-
+        User user = this.userService.findByLoggedUserEntity();
+        expense.setUser(user);
         this.repository.save(expense);
 
         ExpenseResDTO resDTO = new ExpenseResDTO(expense);
@@ -94,21 +97,23 @@ public class ExpenseService {
 
     // metodo que soma todos os valores das despesas
     public ExpenseValueResDTO valueOfExpenses() {
-        double totalValue = this.repository.findAll().stream().mapToDouble(Expense::getValue).sum();
-        long quantit = this.repository.findAll().size();
+        User user = this.userService.findByLoggedUserEntity();
+        List<Expense> expenses = this.repository.findAllByUser(user);
+        double totalValue = expenses.stream().mapToDouble(Expense::getValue).sum();
+        long quantit = expenses.size();
         return new ExpenseValueResDTO(totalValue, quantit);
     }
 
     //metodo que soma as despesas que estão abertas
 
     public ExpenseValueResDTO expensesOpen() {
-        List<Expense> expenses = this.repository.findAll();
+        User user = this.userService.findByLoggedUserEntity();
+        List<Expense> expenses = this.repository.findAllByUser(user);
         List<Expense> openExpenses = new ArrayList<>();
 
         for (Expense expense : expenses) {
             if (expense.getStatus().equals(ExpenseStatus.OPEN)) {
                 openExpenses.add(expense);
-
             }
         }
         double totalValue = openExpenses.stream().mapToDouble(Expense::getValue).sum();
@@ -117,7 +122,8 @@ public class ExpenseService {
 
     //metodo que soma as despesas que estão pagas
     public ExpenseValueResDTO expensesClose() {
-        List<Expense> expenses = this.repository.findAll();
+        User user = this.userService.findByLoggedUserEntity();
+        List<Expense> expenses = this.repository.findAllByUser(user);
         List<Expense> closeExpenses = new ArrayList<>();
 
         for (Expense expense : expenses) {
@@ -131,8 +137,8 @@ public class ExpenseService {
     }
 
     public ExpenseValueResDTO expensesOverdue() {
-
-        List<Expense> expenses = this.repository.findAll();
+        User user = this.userService.findByLoggedUserEntity();
+        List<Expense> expenses = this.repository.findAllByUser(user);
         List<Expense> closeExpenses = new ArrayList<>();
 
         for (Expense expense : expenses) {
@@ -144,22 +150,6 @@ public class ExpenseService {
 
         double totalValue = closeExpenses.stream().mapToDouble(Expense::getValue).sum();
         return new ExpenseValueResDTO(totalValue, closeExpenses.size());
-    }
-
-    //metodo para filtrar as datas
-    public List<ExpenseResDTO> findAllByPurchaseDate(LocalDate initPurchaseDate,
-                                                     LocalDate endPurchaseDate) {
-        List<Expense> expenseList = this.repository.findAllByPurchaseDateBetween(initPurchaseDate, endPurchaseDate);
-
-        List<ExpenseResDTO> resDTOList = new ArrayList<>();
-
-        for (Expense expense : expenseList) {
-
-            ExpenseResDTO expenseResDTO = new ExpenseResDTO(expense);
-
-            resDTOList.add(expenseResDTO);
-        }
-        return resDTOList;
     }
 
     public void logicalExclusion(Long id) {

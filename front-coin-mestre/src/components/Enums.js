@@ -8,16 +8,7 @@ import Chip from '@material-ui/core/Chip';
 import styled from 'styled-components';
 import { Typography } from '@material-ui/core';
 const enums = {
-  roles: ['ADMIN'],
-  dayOfWeek: [
-    'MONDAY',
-    'TUESDAY',
-    'WEDNESDAY',
-    'THURSDAY',
-    'FRIDAY',
-    'SATURDAY',
-    'SUNDAY',
-  ],
+  roles: ['ADMIN', 'USER'],
   status: [
     'OPEN',
     'CLOSE',
@@ -28,16 +19,7 @@ const enumsStyles = {
     { backgroundColor: 'rgb(255, 255, 0)', color: '#000' },
     { backgroundColor: 'rgb(76, 175, 80)', color: '#000' },
     { backgroundColor: 'rgb(255, 0, 0)', color: '#000' },
-  ],
-  dayOfWeek: [
-    { backgroundColor: '#fe504e', color: '#fff' },
-    { backgroundColor: '#fecd66' },
-    { backgroundColor: '#ffff69' },
-    { backgroundColor: '#98ff69' },
-    { backgroundColor: '#339a64', color: '#fff' },
-    { backgroundColor: '#3366ff', color: '#fff' },
-    { backgroundColor: '#ce00cc', color: '#fff' },
-  ],
+  ]
 };
 
 const choices = source => {

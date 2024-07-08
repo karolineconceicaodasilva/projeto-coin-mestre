@@ -2,10 +2,11 @@ package com.projeto.coinmestre.model;
 
 import com.projeto.coinmestre.base.BaseEntity;
 import com.projeto.coinmestre.domain.Role;
-import jakarta.persistence.*;
-import jakarta.validation.constraints.NotBlank;
 import lombok.*;
 
+import javax.persistence.*;
+import javax.validation.constraints.NotBlank;
+import java.util.List;
 import java.util.Set;
 
 @Entity
@@ -32,6 +33,15 @@ public class User extends BaseEntity {
     private String email;
 
     private String password;
+
+    @OneToMany
+    private List<Revenue> revenues;
+
+    @OneToMany
+    private List<Expense> expenses;
+
+    @OneToMany
+    private List<Budget> budgets;
 
     @ElementCollection(targetClass = Role.class, fetch = FetchType.EAGER)
     @Enumerated(EnumType.ORDINAL)

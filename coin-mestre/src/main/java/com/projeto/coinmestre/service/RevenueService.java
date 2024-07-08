@@ -4,10 +4,11 @@ import com.projeto.coinmestre.base.PageReq;
 import com.projeto.coinmestre.base.PageRes;
 import com.projeto.coinmestre.domain.RevenueStatus;
 import com.projeto.coinmestre.dto.req.RevenueReqDTO;
-import com.projeto.coinmestre.dto.res.ExpenseValueResDTO;
 import com.projeto.coinmestre.dto.res.RevenueResDTO;
 import com.projeto.coinmestre.dto.res.RevenueValueResDTO;
+import com.projeto.coinmestre.model.Expense;
 import com.projeto.coinmestre.model.Revenue;
+import com.projeto.coinmestre.model.User;
 import com.projeto.coinmestre.repository.RevenueRepository;
 import com.projeto.coinmestre.util.SearchUtils;
 import lombok.AllArgsConstructor;
@@ -15,7 +16,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -26,14 +26,16 @@ import java.util.stream.Collectors;
 @AllArgsConstructor
 public class RevenueService {
     private RevenueRepository repository;
+    private UserService userService;
 
     public PageRes<RevenueResDTO> findAllRevenues(PageReq query) {
 
         Specification<Revenue> deleted = SearchUtils.specByDeleted(query.isDeleted());
         Specification<Revenue> filters = SearchUtils.specByFilter(query.getFilter(), "id",
                 "description", "value", "category", "purchaseDate", "dueDate");
+        Specification<Revenue> userSpecification = SearchUtils.specByUser(this.userService.findByLoggedUserEntity());
 
-        Page<Revenue> page = this.repository.findAll(deleted.and(filters), query.toPageRequest());
+        Page<Revenue> page = this.repository.findAll(deleted.and(filters).and(userSpecification), query.toPageRequest());
 
         return new PageRes<>(page.getContent().stream().map(RevenueResDTO::new).collect(Collectors.toList()),
                 page.getTotalElements(), page.getTotalPages());
@@ -50,6 +52,8 @@ public class RevenueService {
 
     public RevenueResDTO insert(RevenueReqDTO dto) {
         Revenue revenue = RevenueReqDTO.dtoToModel(dto);
+        User user = this.userService.findByLoggedUserEntity();
+        revenue.setUser(user);
         this.repository.save(revenue);
         RevenueResDTO resDTO = new RevenueResDTO(revenue);
         return resDTO;
@@ -95,13 +99,16 @@ public class RevenueService {
     }
 
     public RevenueValueResDTO valueOfRevenues() {
-        double totalValue = this.repository.findAll().stream().mapToDouble(Revenue::getValue).sum();
-        long quantit = this.repository.findAll().size();
-        return new RevenueValueResDTO(totalValue, quantit);
+        User user = this.userService.findByLoggedUserEntity();
+        List<Revenue> revenues = this.repository.findAllByUser(user);
+        double totalValue = revenues.stream().mapToDouble(Revenue::getValue).sum();
+        long quantity = revenues.size();
+        return new RevenueValueResDTO(totalValue, quantity);
     }
 
     public RevenueValueResDTO revenuesOpen() {
-        List<Revenue> revenues = this.repository.findAll();
+        User user = this.userService.findByLoggedUserEntity();
+        List<Revenue> revenues = this.repository.findAllByUser(user);
         List<Revenue> openRevenues = new ArrayList<>();
 
         for (Revenue revenue : revenues) {
@@ -115,7 +122,8 @@ public class RevenueService {
     }
 
     public RevenueValueResDTO revenuesClose() {
-        List<Revenue> revenues = this.repository.findAll();
+        User user = this.userService.findByLoggedUserEntity();
+        List<Revenue> revenues = this.repository.findAllByUser(user);
         List<Revenue> closeRevenues = new ArrayList<>();
 
         for (Revenue revenue : revenues) {
@@ -129,7 +137,8 @@ public class RevenueService {
     }
 
     public RevenueValueResDTO revenuesOverdue() {
-        List<Revenue> revenues = this.repository.findAll();
+        User user = this.userService.findByLoggedUserEntity();
+        List<Revenue> revenues = this.repository.findAllByUser(user);
         List<Revenue> overdueRevenues = new ArrayList<>();
 
         for (Revenue revenue : revenues) {
@@ -141,24 +150,6 @@ public class RevenueService {
         double totalValue = overdueRevenues.stream().mapToDouble(Revenue::getValue).sum();
         return new RevenueValueResDTO(totalValue, overdueRevenues.size());
     }
-
-
-    public List<RevenueResDTO> findAllByPurchaseDate(LocalDate initPurchaseDate,
-                                                     LocalDate endPurchaseDate) {
-        List<Revenue> revenueList = this.repository.findAllByPurchaseDateBetween(initPurchaseDate, endPurchaseDate);
-
-        List<RevenueResDTO> resDTOList = new ArrayList<>();
-
-        for (Revenue revenue : revenueList) {
-
-            RevenueResDTO revenueResDTO = new RevenueResDTO(revenue);
-
-            resDTOList.add(revenueResDTO);
-        }
-        return resDTOList;
-    }
-
-
 }
 
 

@@ -14,15 +14,7 @@ ptbrMessages.page = {
 ptbrMessages.enums = {
   roles: {
     ADMIN: 'Admin',
-  },
-  dayOfWeek: {
-    MONDAY: 'Segunda-Feira',
-    TUESDAY: 'Terça-Feira',
-    WEDNESDAY: 'Quarta-Feira',
-    THURSDAY: 'Quinta-Feira',
-    FRIDAY: 'Sexta-Feira',
-    SATURDAY: 'Sábado',
-    SUNDAY: 'Domingo',
+    USER: 'User',
   },
   status: {
     OPEN: 'Aberto',
@@ -109,6 +101,20 @@ ptbrMessages.resources = {
       purchaseDate: 'Data de emissão',
       dueDate: 'Vencimento',
       status: 'Status'
+    },
+  },
+
+  budget: {
+    empty: ptbrMessages.page.empty,
+    invite: ptbrMessages.page.invite,
+    name: 'Orçamentos |||| Orçamentos',
+    fields: {
+      createdAt: 'Criado em',
+      updatedAt: 'Atualizado em',
+      goal: 'Objetivo',
+      totalReached: 'Total Alcançado',
+      totalGoal: 'Total do Objetivo'
+      
     },
   },
 };

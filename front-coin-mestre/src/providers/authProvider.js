@@ -10,7 +10,7 @@ import URLs from './URLs';
 export default (type, params) => {
   if (type === AUTH_LOGIN) {
     const { username, password } = params;
-    const basicAuth = `Basic ${btoa('cesargymapp:cesargymapp-secret')}`;
+    const basicAuth = `Basic ${btoa('coin-mestre:backoffice-123456')}`;
     const request = new Request(
       `${URLs.baseURL}/oauth/token?username=${username}&password=${password}&grant_type=password`,
       {

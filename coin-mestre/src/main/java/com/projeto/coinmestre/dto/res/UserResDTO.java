@@ -1,10 +1,12 @@
 package com.projeto.coinmestre.dto.res;
 
+import com.projeto.coinmestre.domain.Role;
 import com.projeto.coinmestre.model.User;
 import lombok.Getter;
 import lombok.Setter;
 
 import java.time.LocalDateTime;
+import java.util.Set;
 
 @Setter
 @Getter
@@ -20,6 +22,7 @@ public class UserResDTO {
         this.updatedAt = user.getUpdatedAt();
         this.name = user.getName();
         this.email = user.getEmail();
+        this.roles = user.getRoles();
     }
 
     private Long id;
@@ -37,5 +40,7 @@ public class UserResDTO {
     private String name;
 
     private String email;
+
+    private Set<Role> roles;
 
 }

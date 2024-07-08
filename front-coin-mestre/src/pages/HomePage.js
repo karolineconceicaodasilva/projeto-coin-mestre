@@ -18,7 +18,7 @@ function getExpenseTotal() {
   axios.get('http://localhost:8080/api/expenses/value-of-expenses', {
     headers: {
       'Accept': 'application/json',
-      // 'Authorization': `Bearer ${localStorage.getItem('token')}`
+      'Authorization': `Bearer ${localStorage.getItem('token')}`
     }
   }).then(res => {
     expensesTotal = { valueTotal: res.data.valueTotal, quantit: res.data.quantit }
@@ -27,7 +27,7 @@ function getExpenseTotal() {
   axios.get('http://localhost:8080/api/expenses/expenses-open', {
     headers: {
       'Accept': 'application/json',
-      // 'Authorization': `Bearer ${localStorage.getItem('token')}`
+      'Authorization': `Bearer ${localStorage.getItem('token')}`
     }
   }).then(res => {
     expenseTotalOpen = { valueTotal: res.data.valueTotal, quantit: res.data.quantit }
@@ -36,7 +36,7 @@ function getExpenseTotal() {
   axios.get('http://localhost:8080/api/expenses/expenses-close', {
     headers: {
       'Accept': 'application/json',
-      // 'Authorization': `Bearer ${localStorage.getItem('token')}`
+      'Authorization': `Bearer ${localStorage.getItem('token')}`
     }
   }).then(res => {
     expenseTotalClose = { valueTotal: res.data.valueTotal, quantit: res.data.quantit }
@@ -45,7 +45,7 @@ function getExpenseTotal() {
   axios.get('http://localhost:8080/api/expenses/expenses-overdue', {
     headers: {
       'Accept': 'application/json',
-      // 'Authorization': `Bearer ${localStorage.getItem('token')}`
+      'Authorization': `Bearer ${localStorage.getItem('token')}`
     }
   }).then(res => {
     expenseTotalOverdue = { valueTotal: res.data.valueTotal, quantit: res.data.quantit }
@@ -62,7 +62,7 @@ function getRevenueTotal() {
   axios.get('http://localhost:8080/api/revenues/value-of-revenues', {
     headers: {
       'Accept': 'application/json',
-      // 'Authorization': `Bearer ${localStorage.getItem('token')}`
+      'Authorization': `Bearer ${localStorage.getItem('token')}`
     }
   }).then(res => {
     revenuesTotal = { valueTotal: res.data.valueTotal, quantit: res.data.quantit }
@@ -71,7 +71,7 @@ function getRevenueTotal() {
   axios.get('http://localhost:8080/api/revenues/revenues-open', {
     headers: {
       'Accept': 'application/json',
-      // 'Authorization': `Bearer ${localStorage.getItem('token')}`
+      'Authorization': `Bearer ${localStorage.getItem('token')}`
     }
   }).then(res => {
     revenueTotalOpen = { valueTotal: res.data.valueTotal, quantit: res.data.quantit }
@@ -80,7 +80,7 @@ function getRevenueTotal() {
   axios.get('http://localhost:8080/api/revenues/revenues-close', {
     headers: {
       'Accept': 'application/json',
-      // 'Authorization': `Bearer ${localStorage.getItem('token')}`
+      'Authorization': `Bearer ${localStorage.getItem('token')}`
     }
   }).then(res => {
     revenueTotalClose = { valueTotal: res.data.valueTotal, quantit: res.data.quantit }
@@ -89,7 +89,7 @@ function getRevenueTotal() {
   axios.get('http://localhost:8080/api/revenues/revenues-overdue', {
     headers: {
       'Accept': 'application/json',
-      // 'Authorization': `Bearer ${localStorage.getItem('token')}`
+      'Authorization': `Bearer ${localStorage.getItem('token')}`
     }
   }).then(res => {
     revenueTotalOverdue = { valueTotal: res.data.valueTotal, quantit: res.data.quantit }
@@ -131,7 +131,7 @@ export const Dashboard = () => (
           </Grid>
 
           <Grid item xs={3}>
-            <Labeled label="Total de despesas "></Labeled>
+            <Labeled label="Total de despesas fechadas "></Labeled>
             <Labeled label="Valor total">
               <Typography>{expenseTotalClose.valueTotal}</Typography>
             </Labeled>
@@ -158,7 +158,7 @@ export const Dashboard = () => (
       <Box sx={{ flexGrow: 1, bgcolor: 'primary.expense', padding: '10px', borderRadius: '10px', marginTop: '10px' }}>
         <Grid container spacing={4}>
           <Grid item xs={3} >
-            <Labeled label="Total de despesas" style={{ textAlign: 'left' }}></Labeled>
+            <Labeled label="Total de receitas" style={{ textAlign: 'left' }}></Labeled>
             <Labeled label="Valor total">
               <Typography>{revenuesTotal.valueTotal}</Typography>
             </Labeled>
@@ -169,7 +169,7 @@ export const Dashboard = () => (
 
 
           <Grid item xs={3}>
-            <Labeled label="Total de despesas em Aberto"></Labeled>
+            <Labeled label="Total de receitas em Aberto"></Labeled>
             <Labeled label="Valor total">
               <Typography>{revenueTotalOpen.valueTotal}</Typography>
             </Labeled>
@@ -179,7 +179,7 @@ export const Dashboard = () => (
           </Grid>
 
           <Grid item xs={3}>
-            <Labeled label="Total de despesas " style= {{color: '#7CFC00'}}></Labeled>
+            <Labeled label="Total de receitas fechadas " style={{ color: '#7CFC00' }}></Labeled>
             <Labeled label="Valor total">
               <Typography>{revenueTotalClose.valueTotal}</Typography>
             </Labeled>
@@ -189,7 +189,7 @@ export const Dashboard = () => (
           </Grid>
 
           <Grid item xs={3}>
-            <Labeled label="Total de despesas vencidas"></Labeled>
+            <Labeled label="Total de receitas vencidas"></Labeled>
             <Labeled label="Valor total">
               <Typography>{revenueTotalOverdue.valueTotal}</Typography>
             </Labeled>

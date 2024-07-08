@@ -1,10 +1,9 @@
 package com.projeto.coinmestre.model;
 
 import com.projeto.coinmestre.base.BaseEntity;
-import jakarta.persistence.*;
 import lombok.*;
 
-import java.time.LocalDate;
+import javax.persistence.*;
 
 @Entity
 @Table(name = "budgets")
@@ -22,11 +21,10 @@ public class Budget extends BaseEntity {
 
     private String goal;
 
-    private LocalDate purchaseDate;
-
-    private Double totalValue;
-
-    private String time;
-
     private Double totalReached;
+
+    private Double totalGoal;
+
+    @ManyToOne
+    private User user;
 }

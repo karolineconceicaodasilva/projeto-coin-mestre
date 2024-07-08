@@ -2,14 +2,12 @@ package com.projeto.coinmestre.dto.req;
 
 import com.projeto.coinmestre.domain.ExpenseStatus;
 import com.projeto.coinmestre.model.Expense;
-import jakarta.validation.constraints.DecimalMin;
-import jakarta.validation.constraints.FutureOrPresent;
-import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.PastOrPresent;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
 
+import javax.validation.constraints.DecimalMin;
+import javax.validation.constraints.NotNull;
 import java.time.LocalDate;
 //ExpenseReqDTO(foi feita essa classe para ser passada as informações ao cliente)
 @AllArgsConstructor

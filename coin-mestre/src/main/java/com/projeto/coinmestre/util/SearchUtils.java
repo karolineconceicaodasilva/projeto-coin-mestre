@@ -1,7 +1,7 @@
 package com.projeto.coinmestre.util;
 
 import com.projeto.coinmestre.model.User;
-import jakarta.persistence.criteria.*;
+import javax.persistence.criteria.*;
 import org.springframework.data.jpa.domain.Specification;
 
 import java.time.DayOfWeek;
@@ -79,6 +79,6 @@ public class SearchUtils {
 
 
     public static <T> Specification<T> specByUser(User user) {
-        return (root, query, builder) -> builder.equal(root.get("to"), user);
+        return (root, query, builder) -> builder.equal(root.get("user"), user);
     }
 }

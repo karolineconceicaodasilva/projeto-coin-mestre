@@ -2,7 +2,7 @@ package com.projeto.coinmestre.model;
 
 import com.projeto.coinmestre.base.BaseEntity;
 import com.projeto.coinmestre.domain.RevenueStatus;
-import jakarta.persistence.*;
+import javax.persistence.*;
 import lombok.*;
 
 import java.time.LocalDate;
@@ -30,4 +30,7 @@ public class Revenue extends BaseEntity {
     private LocalDate dueDate;
 
     private RevenueStatus status;
+
+    @ManyToOne
+    private User user;
 }

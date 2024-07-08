@@ -6,3 +6,4 @@ const MyLoginPage = () => (
 );
 
 export default MyLoginPage;
+
