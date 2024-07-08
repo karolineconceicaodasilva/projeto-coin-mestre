@@ -6,7 +6,6 @@ import com.projeto.coinmestre.domain.RevenueStatus;
 import com.projeto.coinmestre.dto.req.RevenueReqDTO;
 import com.projeto.coinmestre.dto.res.RevenueResDTO;
 import com.projeto.coinmestre.dto.res.RevenueValueResDTO;
-import com.projeto.coinmestre.model.Expense;
 import com.projeto.coinmestre.model.Revenue;
 import com.projeto.coinmestre.model.User;
 import com.projeto.coinmestre.repository.RevenueRepository;

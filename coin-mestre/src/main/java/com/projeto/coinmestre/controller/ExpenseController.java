@@ -6,16 +6,14 @@ import com.projeto.coinmestre.dto.req.ExpenseReqDTO;
 import com.projeto.coinmestre.dto.res.ExpenseResDTO;
 import com.projeto.coinmestre.dto.res.ExpenseValueResDTO;
 import com.projeto.coinmestre.service.ExpenseService;
-import javax.validation.Valid;
 import lombok.AllArgsConstructor;
-import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.UriComponentsBuilder;
+
+import javax.validation.Valid;
 import java.net.URI;
-import java.time.LocalDate;
-import java.util.List;
 
 @CrossOrigin(origins = "http://localhost:3000")
 //para dizer que essa classe é um controller

@@ -30,9 +30,9 @@ public class ApplicationStartup implements ApplicationListener<ApplicationReadyE
             HashSet<Role> roles = new HashSet<>(List.of(Role.ADMIN));
             this.userRepository.save(User
                     .builder()
-                    .username("karol@gmail.com")
+                    .username("admin@gmail.com")
                     .name("Administrador do Sistema")
-                    .email("karol@gmail.com")
+                    .email("admin@gmail.com")
                     .password(this.passwordEncoder.encode("1234"))
                     .roles(roles)
                     .build());
