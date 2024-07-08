@@ -99,7 +99,7 @@ public class RevenueService {
 
     public RevenueValueResDTO valueOfRevenues() {
         User user = this.userService.findByLoggedUserEntity();
-        List<Revenue> revenues = this.repository.findAllByUser(user);
+        List<Revenue> revenues = this.repository.findAllByUserAndDeletedIsFalse(user);
         double totalValue = revenues.stream().mapToDouble(Revenue::getValue).sum();
         long quantity = revenues.size();
         return new RevenueValueResDTO(totalValue, quantity);
@@ -107,7 +107,7 @@ public class RevenueService {
 
     public RevenueValueResDTO revenuesOpen() {
         User user = this.userService.findByLoggedUserEntity();
-        List<Revenue> revenues = this.repository.findAllByUser(user);
+        List<Revenue> revenues = this.repository.findAllByUserAndDeletedIsFalse(user);
         List<Revenue> openRevenues = new ArrayList<>();
 
         for (Revenue revenue : revenues) {
@@ -122,7 +122,7 @@ public class RevenueService {
 
     public RevenueValueResDTO revenuesClose() {
         User user = this.userService.findByLoggedUserEntity();
-        List<Revenue> revenues = this.repository.findAllByUser(user);
+        List<Revenue> revenues = this.repository.findAllByUserAndDeletedIsFalse(user);
         List<Revenue> closeRevenues = new ArrayList<>();
 
         for (Revenue revenue : revenues) {
@@ -137,7 +137,7 @@ public class RevenueService {
 
     public RevenueValueResDTO revenuesOverdue() {
         User user = this.userService.findByLoggedUserEntity();
-        List<Revenue> revenues = this.repository.findAllByUser(user);
+        List<Revenue> revenues = this.repository.findAllByUserAndDeletedIsFalse(user);
         List<Revenue> overdueRevenues = new ArrayList<>();
 
         for (Revenue revenue : revenues) {

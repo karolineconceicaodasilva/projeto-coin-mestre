@@ -72,7 +72,7 @@ public class RevenueController {
 
     @PreAuthorize("isAuthenticated()")
     @GetMapping("value-of-revenues")
-    public RevenueValueResDTO sumOfrevenues() {
+    public RevenueValueResDTO sumOfRevenues() {
         return this.service.valueOfRevenues();
     }
 

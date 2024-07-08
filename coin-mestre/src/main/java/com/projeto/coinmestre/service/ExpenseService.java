@@ -98,7 +98,7 @@ public class ExpenseService {
     // metodo que soma todos os valores das despesas
     public ExpenseValueResDTO valueOfExpenses() {
         User user = this.userService.findByLoggedUserEntity();
-        List<Expense> expenses = this.repository.findAllByUser(user);
+        List<Expense> expenses = this.repository.findAllByUserAndDeletedIsFalse(user);
         double totalValue = expenses.stream().mapToDouble(Expense::getValue).sum();
         long quantit = expenses.size();
         return new ExpenseValueResDTO(totalValue, quantit);
@@ -108,7 +108,7 @@ public class ExpenseService {
 
     public ExpenseValueResDTO expensesOpen() {
         User user = this.userService.findByLoggedUserEntity();
-        List<Expense> expenses = this.repository.findAllByUser(user);
+        List<Expense> expenses = this.repository.findAllByUserAndDeletedIsFalse(user);
         List<Expense> openExpenses = new ArrayList<>();
 
         for (Expense expense : expenses) {
@@ -123,7 +123,7 @@ public class ExpenseService {
     //metodo que soma as despesas que estão pagas
     public ExpenseValueResDTO expensesClose() {
         User user = this.userService.findByLoggedUserEntity();
-        List<Expense> expenses = this.repository.findAllByUser(user);
+        List<Expense> expenses = this.repository.findAllByUserAndDeletedIsFalse(user);
         List<Expense> closeExpenses = new ArrayList<>();
 
         for (Expense expense : expenses) {
@@ -138,7 +138,7 @@ public class ExpenseService {
 
     public ExpenseValueResDTO expensesOverdue() {
         User user = this.userService.findByLoggedUserEntity();
-        List<Expense> expenses = this.repository.findAllByUser(user);
+        List<Expense> expenses = this.repository.findAllByUserAndDeletedIsFalse(user);
         List<Expense> closeExpenses = new ArrayList<>();
 
         for (Expense expense : expenses) {

@@ -8,7 +8,7 @@ import java.util.List;
 
 public interface ExpenseRepository extends BaseRepository<Expense, Long> {
 
-    List<Expense> findAllByUser(User user);
+    List<Expense> findAllByUserAndDeletedIsFalse(User user);
 }
 
 

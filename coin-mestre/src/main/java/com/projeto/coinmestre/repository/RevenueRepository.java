@@ -8,7 +8,7 @@ import com.projeto.coinmestre.model.User;
 import java.util.List;
 
 public interface RevenueRepository extends BaseRepository<Revenue, Long> {
-    List<Revenue> findAllByUser(User user);
+    List<Revenue> findAllByUserAndDeletedIsFalse(User user);
 
 }
 
